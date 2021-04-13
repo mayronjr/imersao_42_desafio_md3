@@ -1,0 +1,17 @@
+{
+  "name": "desafio_md3",
+  "version": "1.0.0",
+  "description": "Quake Log Parser",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "nyc mocha 'src/tests/**/*.js' --timeout 10000 --test"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "mocha": "^8.3.2",
+    "nyc": "^15.1.0"
+  }
+}
