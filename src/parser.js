@@ -22,9 +22,51 @@ function parser(log){
             game.push(line.trim())
         }
     }
+    // Before returning the games, will transform the lines to something more undertable.
     for(i in games_list){
         game = games_list[i]
-        console.log(game)
+        let transformed_game = {
+            total_kills: 0,
+            players: [],
+            kills: {},
+            kills_by_means: {}
+        }
+        for(let j in game){
+            if(game[j].search('ClientUserinfoChanged') !== -1){
+                let id = game[j].trim().split(' ')[2].trim()
+                let name = game[j].trim().split('\\')[1].trim()
+                if(!transformed_game.players.find((player)=>player.id === id)){
+                    transformed_game.players.push({id, name, old_nicks: []})
+                }else{
+                    let user = transformed_game.players.find((player)=>player.id === id)
+                    user.old_nicks.push(user.name)
+                    user.name = name
+                }
+                if(transformed_game.kills[id] === undefined){
+                    transformed_game.kills[id] = 0
+                }
+            }
+            if(game[j].search('Kill') !== -1){
+                transformed_game.total_kills += 1
+                
+                let splited_message = game[j].trim().split(':')[2].trim()
+                let killer = splited_message.split(' ')[0].trim()
+                let killed = splited_message.split(' ')[1].trim()
+                
+                if(killer === "1022"){
+                    transformed_game.kills[killed] -= 1
+                }else{
+                    transformed_game.kills[killer] += 1
+                }
+                let killed_with = game[j].trim().split(':')[3].split('by')[1].trim()
+                if(transformed_game.kills_by_means[killed_with] === undefined){
+                    transformed_game.kills_by_means[killed_with] = 1
+                }else{
+                    transformed_game.kills_by_means[killed_with] += 1
+                }
+            }
+        }
+        games_list[i] = transformed_game
     }
     return games_list
 }
