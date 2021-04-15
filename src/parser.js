@@ -40,7 +40,8 @@ class Parser {
                 total_kills: 0,
                 players: [],
                 kills: {},
-                kills_by_means: {}
+                kills_by_means: {},
+                ranking: []
             }
             for (let j in game) {
                 if (game[j].search('ClientUserinfoChanged') !== -1) {
@@ -77,6 +78,10 @@ class Parser {
                     }
                 }
             }
+            for(let i in transformed_game.kills){
+                transformed_game.ranking.push({id: i, points: transformed_game.kills[i]})
+            }
+            transformed_game.ranking.sort((a, b)=> b.points - a.points)
             games_list[i] = transformed_game
         }
         this.games_list = games_list

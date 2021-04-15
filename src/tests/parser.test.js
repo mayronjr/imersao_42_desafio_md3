@@ -39,6 +39,8 @@ describe('Testing class Parser', ()=>{
             result[0].kills.should.be.a('object')
             result[0].should.have.property('kills_by_means')
             result[0].kills_by_means.should.be.a('object')
+            result[0].should.have.property('ranking')
+            result[0].ranking.should.be.a('array')
             done();
         })
         it('null when Parser.parse() has not been executed correctly or at all', (done)=>{
