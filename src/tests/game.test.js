@@ -29,7 +29,6 @@ describe('Testing class Game', ()=>{
             game_test.changePlayerName('2', 'Testing').should.be.eql(false)
             done()
         })
-
     })
     describe('Function Game.makekill(killer_id, killed_id, killed_with) return',()=>{
         it('true when killer and killed exist', (done)=>{
@@ -62,7 +61,6 @@ describe('Testing class Game', ()=>{
     describe('Function Game.getGameObject() return',()=>{
         it('a object contining all of variables of the class', (done)=>{
             var obj = game_test.getGameObject()
-            console.log(obj)
             obj.should.have.property('total_kills')
             obj.total_kills.should.be.a('number')
             obj.should.have.property('players')
@@ -76,4 +74,16 @@ describe('Testing class Game', ()=>{
             done()
         })
     })
+    describe('Function Game.playerExist(id) return',()=>{
+        it('true when player exist', (done)=>{
+            game_test.playerExist('10').should.be.eql(true)
+            done()
+        })
+        it('false when player doesnt exist', (done)=>{
+            game_test.changePlayerName('2').should.be.eql(false)
+            done()
+        })
+
+    })
+      
 })

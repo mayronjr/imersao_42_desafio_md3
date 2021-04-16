@@ -17,6 +17,14 @@ class Game {
         }
     }
 
+    playerExist(id){
+        if (this.players.find((player) => player.id === id)) {
+            return true
+        } else {
+            return false
+        }
+    }
+
     changePlayerName(id, newName) {
         if (this.players.find((player) => player.id === id)) {
             let user = this.players.find((player) => player.id === id)
@@ -36,6 +44,7 @@ class Game {
         ) {
             return false
         }
+        this.total_kills += 1
         if (killer_id === "1022") {
             this.kills[killed_id] -= 1
         } else {

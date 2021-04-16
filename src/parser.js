@@ -1,3 +1,5 @@
+let Game = require('./game')
+
 class Parser {
     constructor(log) {
         this.log = log
@@ -5,6 +7,10 @@ class Parser {
     }
 
     getGames_List(){
+        let json = []
+        for(let i in this.games_list){
+            json.push(this.games_list[i].getGameObject())
+        }
         return this.games_list
     }
 
@@ -36,52 +42,28 @@ class Parser {
         // Before returning the games, will transform the lines to something more undertable.
         for (i in games_list) {
             game = games_list[i]
-            let transformed_game = {
-                total_kills: 0,
-                players: [],
-                kills: {},
-                kills_by_means: {},
-                ranking: []
-            }
+            let transformed_game = new Game()
             for (let j in game) {
                 if (game[j].search('ClientUserinfoChanged') !== -1) {
                     let id = game[j].trim().split(' ')[2].trim()
                     let name = game[j].trim().split('\\')[1].trim()
-                    if (!transformed_game.players.find((player) => player.id === id)) {
-                        transformed_game.players.push({ id, name, old_nicks: [] })
+                    if (!transformed_game.playerExist(id)) {
+                        transformed_game.addPlayer(id, name)
                     } else {
-                        let user = transformed_game.players.find((player) => player.id === id)
-                        user.old_nicks.push(user.name)
-                        user.name = name
-                    }
-                    if (transformed_game.kills[id] === undefined) {
-                        transformed_game.kills[id] = 0
+                        transformed_game.changePlayerName(id, name)
                     }
                 }
                 if (game[j].search('Kill') !== -1) {
-                    transformed_game.total_kills += 1
 
                     let splited_message = game[j].trim().split(':')[2].trim()
                     let killer = splited_message.split(' ')[0].trim()
                     let killed = splited_message.split(' ')[1].trim()
-
-                    if (killer === "1022") {
-                        transformed_game.kills[killed] -= 1
-                    } else {
-                        transformed_game.kills[killer] += 1
-                    }
                     let killed_with = game[j].trim().split(':')[3].split('by')[1].trim()
-                    if (transformed_game.kills_by_means[killed_with] === undefined) {
-                        transformed_game.kills_by_means[killed_with] = 1
-                    } else {
-                        transformed_game.kills_by_means[killed_with] += 1
-                    }
+                    
+                    transformed_game.makeKill(killer, killed, killed_with)
                 }
             }
-            for(let i in transformed_game.kills){
-                transformed_game.ranking.push({id: i, points: transformed_game.kills[i]})
-            }
-            transformed_game.ranking.sort((a, b)=> b.points - a.points)
+            transformed_game.makeRanking()
             games_list[i] = transformed_game
         }
         this.games_list = games_list

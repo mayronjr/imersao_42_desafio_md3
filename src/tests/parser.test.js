@@ -31,16 +31,18 @@ describe('Testing class Parser', ()=>{
     describe('Function Parser.getGames_List() return', ()=>{
         it('a array of Objects (these are described in the Readme) when Parser.parse() is executed sucefully', (done)=>{
             result = testParser1.getGames_List()
-            result[0].should.have.property('total_kills')
-            result[0].total_kills.should.be.a('number')
-            result[0].should.have.property('players')
-            result[0].players.should.be.a('array')
-            result[0].should.have.property('kills')
-            result[0].kills.should.be.a('object')
-            result[0].should.have.property('kills_by_means')
-            result[0].kills_by_means.should.be.a('object')
-            result[0].should.have.property('ranking')
-            result[0].ranking.should.be.a('array')
+            for(let i in result){
+                result[i].should.have.property('total_kills')
+                result[i].total_kills.should.be.a('number')
+                result[i].should.have.property('players')
+                result[i].players.should.be.a('array')
+                result[i].should.have.property('kills')
+                result[i].kills.should.be.a('object')
+                result[i].should.have.property('kills_by_means')
+                result[i].kills_by_means.should.be.a('object')
+                result[i].should.have.property('ranking')
+                result[i].ranking.should.be.a('array')
+            }
             done();
         })
         it('null when Parser.parse() has not been executed correctly or at all', (done)=>{
