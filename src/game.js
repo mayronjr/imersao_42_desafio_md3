@@ -1,3 +1,5 @@
+let Player = require('./player')
+
 class Game {
     constructor() {
         this.total_kills = 0

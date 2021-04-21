@@ -52,8 +52,7 @@ class Parser {
                     } else {
                         transformed_game.changePlayerName(id, name)
                     }
-                }
-                if (game[j].search('Kill') !== -1) {
+                } else if (game[j].search('Kill') !== -1) {
 
                     let splited_message = game[j].trim().split(':')[2].trim()
                     let killer = splited_message.split(' ')[0].trim()
@@ -61,6 +60,8 @@ class Parser {
                     let killed_with = game[j].trim().split(':')[3].split('by')[1].trim()
                     
                     transformed_game.makeKill(killer, killed, killed_with)
+                }else if (game[j].search('item') !== -1){
+                    // console.log(game[j])
                 }
             }
             transformed_game.makeRanking()
