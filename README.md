@@ -86,11 +86,27 @@ Saida:
 
 ## Classe Game
 
-A classe Game é um conjunto de funções e variaveis que permitem o gerenciamento de um jogo. Ela contém 6 funções:
+A classe Game é um conjunto de funções e variaveis que permitem o gerenciamento de um jogo. Ela contém 9 funções:
 
+- Construtor: `new Game()`
 - `addPlayer(id, name)`
 - `changePlayerName(id, name)`
 - `makekill(killer_id, killed_id, killed_with)`
+- `additemToPlayer(itemName, time, player_id)`
+- `transferinventory(killer_id, killed_id)`
+- `verifyItems(final_time)`
 - `makeRanking()`
 - `playerExist(id)`
 - `getGameObject()`
+
+## Classe Player
+
+A classe Player é um conjunto de funções e variaveis que definem o modelo de um player, permitindo uma melhor organização das funções de gerenciamanto de inventário. Ela contém 6 funções, além do construtor:
+
+- Construtor: `new Player(id, name)`
+- `addItem(name, time)`
+- `resetInventory()`
+- `getInventory()`
+- `getId()`
+- `changeName(newName)`
+- `getPlayerObject()`

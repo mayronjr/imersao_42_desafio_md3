@@ -48,7 +48,7 @@ describe('Testing class Player', ()=>{
     describe('Function Player.resetInventory()', ()=>{
         it('reset the inventory of the player a empty array',(done)=>{
             let tp = new Player(1, 'NNN')
-            tp.addItem('Teste', 1, 1)
+            tp.addItem('Teste', '00:00')
             tp.resetInventory()
             tp.getInventory().should.be.a('array')
             tp.getInventory().length.should.be.eql(0)
@@ -75,33 +75,24 @@ describe('Testing class Player', ()=>{
         it('throw exception if name is not a String', (done)=>{
             let tp = new Player(1, 'NNN')
             try {
-                tp.addItem(1, 10, 1)
+                tp.addItem(1, '00:00')
             } catch (error) {
                 done()
             }
             throw Error()
         })
-        it('throw exception if timeHours is not a Number', (done)=>{
+        it('throw exception if time is not a String', (done)=>{
             let tp = new Player(1, 'NNN')
             try {
-                tp.addItem('1', '10', 1)
+                tp.addItem('1', 1)
             } catch (error) {
                 done()
             }
             throw Error()
         })
-        it('throw exception if timeMinutes is not a Number', (done)=>{
+        it('return true when item is sucefully added', (done)=>{
             let tp = new Player(1, 'NNN')
-            try {
-                tp.addItem('1', 10, '1')
-            } catch (error) {
-                done()
-            }
-            throw Error()
-        })
-        it('return true when name is sucefully changed', (done)=>{
-            let tp = new Player(1, 'NNN')
-            tp.addItem('ItemName', 10, 1).should.be.eql(true)
+            tp.addItem('ItemName', '00:00').should.be.eql(true)
             done()
         })
     })
@@ -114,6 +105,8 @@ describe('Testing class Player', ()=>{
             obj.should.have.property('id')
             obj.should.have.property('old_nicks')
             obj.old_nicks.should.be.a('array')
+            obj.should.have.property('inventory')
+            obj.inventory.should.be.a('array')
             done()
         })
     })    

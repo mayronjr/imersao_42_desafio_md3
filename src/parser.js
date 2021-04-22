@@ -7,11 +7,12 @@ class Parser {
     }
 
     getGames_List(){
+        if(this.games_list === null) return null
         let json = []
         for(let i in this.games_list){
             json.push(this.games_list[i].getGameObject())
         }
-        return this.games_list
+        return json
     }
 
     parse() {
@@ -43,6 +44,7 @@ class Parser {
         for (i in games_list) {
             game = games_list[i]
             let transformed_game = new Game()
+            let final_time = ''
             for (let j in game) {
                 if (game[j].search('ClientUserinfoChanged') !== -1) {
                     let id = game[j].trim().split(' ')[2].trim()
@@ -61,9 +63,18 @@ class Parser {
                     
                     transformed_game.makeKill(killer, killed, killed_with)
                 }else if (game[j].search('item') !== -1){
-                    // console.log(game[j])
+                    let splited_message = game[j].trim().split(' ')
+                    transformed_game.additemToPlayer(
+                        splited_message[3].trim(),
+                        splited_message[0].trim(),
+                        splited_message[2].trim()
+                    )
+                }
+                if(game[j].trim().split(' ')[0].trim().search(':') !== -1){
+                    final_time = game[j].trim().split(' ')[0].trim()
                 }
             }
+            transformed_game.verifyItems(final_time)            
             transformed_game.makeRanking()
             games_list[i] = transformed_game
         }

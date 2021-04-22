@@ -83,7 +83,61 @@ describe('Testing class Game', ()=>{
             game_test.changePlayerName('2').should.be.eql(false)
             done()
         })
+    })
 
+    describe('Function Game.addItemToPlayer(itemName, time, player_id) returns',()=>{
+        it('true when player exists', (done)=>{
+            game_test.additemToPlayer('Teste', '00:00', '10').should.be.eql(true)
+            done()
+        })
+        it('false when player doesnt exist', (done)=>{
+            game_test.additemToPlayer('Teste', '00:00', -1).should.be.eql(false)
+            done()
+        })
+
+    })
+
+    describe('Function Game.transferinventory(killer_id, killed_id)',()=>{
+        it('When killer is the world, the items of the killed player are destroyed', (done)=>{
+            let inventoryPlayer10 = game_test.players.find((player) => player.getId() === "10").getInventory()
+            inventoryPlayer10.length.should.be.eql(1)
+            game_test.transferinventory("1022", "10")
+            inventoryPlayer10 = game_test.players.find((player) => player.getId() === "10").getInventory()
+            inventoryPlayer10.length.should.be.eql(0)
+            done()
+        })
+        it('when killer is not the world, the inventory of the killed pass to the killer', (done)=>{
+            game_test.additemToPlayer('teste', '00:00', '5')
+            
+            let invPlayer = game_test.players.find((player) => player.getId() === "5").getInventory()
+            invPlayer.length.should.be.eql(1)
+            invPlayer = game_test.players.find((player) => player.getId() === "1").getInventory()
+            invPlayer.length.should.be.eql(0)
+            
+            game_test.transferinventory("1", "5")
+            
+            invPlayer = game_test.players.find((player) => player.getId() === "5").getInventory()
+            invPlayer.length.should.be.eql(0)
+            invPlayer = game_test.players.find((player) => player.getId() === "1").getInventory()
+            invPlayer.length.should.be.eql(1)
+            done()
+        })
+    })
+
+    describe('Function Game.verifyItems(final_time)', ()=>{
+        it('Make every item that is more than 3 minutes old expire', (done)=>{
+            game_test.additemToPlayer('Item', '01:00', '1')
+            
+            let inventoryPlayer1 = game_test.getGameObject().players[2].inventory
+            inventoryPlayer1.length.should.be.eql(2)
+            
+            game_test.verifyItems('03:01')
+            
+            inventoryPlayer1 = game_test.getGameObject().players[2].inventory
+            inventoryPlayer1.length.should.be.eql(1)
+            
+            done()
+        })
     })
       
 })

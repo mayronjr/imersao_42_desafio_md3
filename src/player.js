@@ -19,7 +19,6 @@ function verifyType(v, t) {
             throw Error(vn + ' should be a String, instead received a ' +  typeof v[vn])
         }
     }
-    // console.log(vn + ' should be a Number or a String, instead received a ' + typeof v[vn])
 }
 
 class Player {
@@ -32,12 +31,11 @@ class Player {
         this.inventory = []
     }
 
-    addItem(name, timeHours, timeMinutes){
+    addItem(name, time){
         verifyType({name}, 'string')
-        verifyType({timeHours}, 'number')
-        verifyType({timeMinutes}, 'number')
-
-        this.inventory.push({name, time:{timeMinutes, timeHours}})
+        verifyType({time}, 'string')
+        
+        this.inventory.push({name, time})
         return true
     }
 
@@ -61,10 +59,16 @@ class Player {
     }
 
     getPlayerObject() {
+        let {name, id, old_nicks, inventory} = this
+        let invNames = []
+        for(let i in inventory){
+            invNames.push(inventory[i].name)
+        }
         return {
-            name: this.name,
-            id: this.id,
-            old_nicks: this.old_nicks
+            name,
+            id,
+            old_nicks,
+            inventory
         }
     }
 }
